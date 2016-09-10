@@ -12,24 +12,19 @@ def main(argv):
     """ Main """
     ticks = 10000
     sleep = .05
-    world = gameoflife.random_world(width=100, height=50, fill_chance=.05)
+    world = gameoflife.random_world(width=20, height=20, fill_chance=.15)
     gameoflife.show_world(world)
+    (seen_worlds, _, _) = gameoflife.is_unique(0, world)
     print('\n')
-    # seen_worlds = dict()
-    # world.flags.writeable = False
-    # seen_worlds[hash(world.data)] = [-1]
     for tick in range(0, ticks):
         time.sleep(sleep)
         world = gameoflife.next_tick(world, born=[3], survive=[2, 3])
         gameoflife.show_world(world)
+        (seen_worlds, new, indices) = gameoflife.is_unique(tick, world, seen_worlds)
+        if not new:
+            print('World looping at tick ' + str(tick) + ', jumping to tick ' + str(indices) + '.')
+            return
         print('\n')
-        # world.flags.writeable = False
-        # hash_id = hash(world.data)
-        # seen_ticks = [tick]
-        # if hash_id in seen_worlds:
-        #     seen_ticks += seen_worlds[hash_id]
-        #     print('Tick ' + str(tick) + ' loops back to tick ' + str(seen_ticks))
-        # seen_worlds[hash(world.data)] = seen_ticks
     print("finished")
 
 

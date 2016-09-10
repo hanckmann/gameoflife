@@ -50,6 +50,19 @@ def next_tick(world, born=[3], survive=[2, 3]):
     return next_world
 
 
+def is_unique(tick, world, seen_worlds=dict()):
+    """ Check if the world has been seen before (and when) """
+    new = True
+    world_hash = hash(world.tostring())
+    if world_hash in seen_worlds.keys():
+        new = False
+        tick = seen_worlds[world_hash]
+    else:
+        seen_worlds[world_hash] = tick
+
+    return (seen_worlds, new, tick)
+
+
 def show_world(world):
     """ Print the world to screen """
     (width, height) = world.shape
